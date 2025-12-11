@@ -16,6 +16,134 @@ class LocalSemanticAgent {
   }
 
   /**
+   * Start autonomous monitoring of the page after an adaptation has been applied.
+   * - watches for background-color changes on visual elements
+   * - refreshes ontology and transformations when changes are detected
+   * - prints status to an output element (if provided)
+   */
+  startAutonomy(outputElementId = "agentOutput") {
+    if (this._observer) return; // already running
+    this._outputEl = document.getElementById(outputElementId) || null;
+
+    const selector = ".color-card, .bar, .flag .stripe";
+    const nodes = Array.from(document.querySelectorAll(selector));
+    const config = {
+      attributes: true,
+      attributeFilter: ["style"],
+      subtree: false,
+    };
+
+    const performSnapshot = async (mutationsList = []) => {
+      const changes = [];
+      // if mutationsList provided, extract changed nodes, otherwise snapshot all observed nodes
+      if (mutationsList && mutationsList.length) {
+        for (const m of mutationsList) {
+          const target = m.target;
+          const label =
+            (target.dataset && target.dataset.label) ||
+            target.getAttribute("data-label") ||
+            target.getAttribute("data-original-color") ||
+            target.id ||
+            null;
+          const color = window.getComputedStyle(target).backgroundColor;
+          changes.push({ label, color });
+        }
+      } else {
+        const all = Array.from(document.querySelectorAll(selector));
+        for (const target of all) {
+          const label =
+            (target.dataset && target.dataset.label) ||
+            target.getAttribute("data-label") ||
+            target.getAttribute("data-original-color") ||
+            target.id ||
+            null;
+          const color = window.getComputedStyle(target).backgroundColor;
+          changes.push({ label, color });
+        }
+      }
+
+      // fetch ontology and transformations to keep knowledge fresh
+      const ontology = await this.getOntology();
+      const transformations = await this.getColorTransformations(
+        this.currentDaltonismType
+      );
+
+      const payload = {
+        event:
+          mutationsList && mutationsList.length ? "dom-changed" : "snapshot",
+        daltonismType: this.currentDaltonismType,
+        changes,
+        ontologySummary: ontology
+          ? ontology["@graph"]
+            ? ontology["@graph"].length
+            : null
+          : null,
+        transformations: transformations,
+      };
+
+      // Always log to console for easier debugging
+      try {
+        console.log("SemanticAgent snapshot:", payload);
+      } catch (e) {}
+
+      try {
+        if (this._outputEl)
+          this._outputEl.textContent = JSON.stringify(payload, null, 2);
+      } catch (e) {
+        // ignore
+      }
+    };
+
+    const callback = (mutationsList) => {
+      // fire-and-forget
+      performSnapshot(mutationsList).catch(() => {});
+    };
+
+    this._observer = new MutationObserver(callback);
+    nodes.forEach((n) => this._observer.observe(n, config));
+
+    // initial snapshot immediately so UI shows current state
+    performSnapshot().catch(() => {});
+
+    // Also observe dynamic additions under the main container
+    const container = document.querySelector(".content-container");
+    if (container) {
+      this._containerObserver = new MutationObserver((mutations) => {
+        for (const m of mutations) {
+          for (const node of Array.from(m.addedNodes || [])) {
+            if (!(node instanceof HTMLElement)) continue;
+            if (
+              node.matches &&
+              node.matches(".color-card, .bar, .flag .stripe")
+            ) {
+              this._observer.observe(node, config);
+            }
+            // also find children
+            const children =
+              node.querySelectorAll?.(".color-card, .bar, .flag .stripe") || [];
+            children.forEach((c) => this._observer.observe(c, config));
+          }
+        }
+      });
+      this._containerObserver.observe(container, {
+        childList: true,
+        subtree: true,
+      });
+    }
+  }
+
+  stopAutonomy() {
+    if (this._observer) {
+      this._observer.disconnect();
+      this._observer = null;
+    }
+    if (this._containerObserver) {
+      this._containerObserver.disconnect();
+      this._containerObserver = null;
+    }
+  }
+
+  /**
    * Inicializar el agente y cargar perfil del usuario
    */
   async initialize(userId) {
@@ -256,6 +384,15 @@ class LocalSemanticAgent {
 
 // Exportar para uso en el navegador
 window.LocalSemanticAgent = LocalSemanticAgent;
+
+// Create a singleton agent instance for the page to be used by app.js
+try {
+  if (!window.semanticAgent) {
+    window.semanticAgent = new LocalSemanticAgent();
+  }
+} catch (e) {
+  // ignore in non-browser contexts
+}
 
 /* ------------------------
    Small test harness for the frontend 'Agent Tester' UI

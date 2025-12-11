@@ -144,7 +144,9 @@ class AdaptationController {
       const { daltonismType } = req.params;
 
       if (
-        !["protanopia", "deuteranopia", "tritanopia"].includes(daltonismType)
+        !["protanopia", "deuteranopia", "tritanopia", "normal"].includes(
+          daltonismType
+        )
       ) {
         return res.status(400).json({ error: "Invalid daltonism type" });
       }

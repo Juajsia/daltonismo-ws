@@ -125,6 +125,17 @@ class SemanticAgent {
   }
 
   static getColorTransformations(daltonismType) {
+    // For 'normal' vision, return an identity mapping (colors map to themselves)
+    if (daltonismType === "normal") {
+      const keys = Object.values(colorTransformations).reduce((acc, map) => {
+        Object.keys(map).forEach((k) => acc.add(k));
+        return acc;
+      }, new Set());
+      const identity = {};
+      keys.forEach((k) => (identity[k] = k));
+      return identity;
+    }
+
     return (
       colorTransformations[daltonismType] || colorTransformations.tritanopia
     );

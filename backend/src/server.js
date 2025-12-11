@@ -15,10 +15,11 @@ const MONGO_URI =
 
 // Middleware
 app.use(
-  cors({
-    origin: (process.env.CORS_ORIGIN || "http://localhost:3000").split(","),
-    credentials: true,
-  })
+  // cors({
+  //   origin: (process.env.CORS_ORIGIN || "http://localhost:3000").split(","),
+  //   credentials: true,
+  // })
+  cors()
 );
 app.use(bodyParser.json({ limit: "10mb" }));
 app.use(bodyParser.urlencoded({ limit: "10mb", extended: true }));
