@@ -1,0 +1,23 @@
+
+@prefix : <http://example.org/daltonismo#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+:Daltonismo a rdfs:Class .
+:Protanopia a :Daltonismo .
+:Deuteranopia a :Daltonismo .
+:Tritanopia a :Daltonismo .
+
+:AdaptationStrategy a rdfs:Class .
+:requiresAdaptationFor a rdfs:Property ;
+    rdfs:domain :Daltonismo ;
+    rdfs:range :AdaptationStrategy .
+
+:Color a rdfs:Class .
+:hasHex a rdfs:Property ; rdfs:domain :Color ; rdfs:range xsd:string .
+:mappedTo a rdfs:Property ; rdfs:domain :Color ; rdfs:range :Color .
+
+# Ejemplo: red mapped for protanopia
+:red a :Color ;
+    :hasHex "#FF0000" ;
+    :mappedTo :blue .

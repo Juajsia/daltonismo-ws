@@ -1,0 +1,182 @@
+:root {
+  --bg: #f4f6fa;
+  --panel: #ffffff;
+  --primary: #0d6efd;
+  --text: #333;
+  --shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
+  --radius: 12px;
+  --transition: 0.25s ease;
+  --card-size: 140px;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  font-family: "Segoe UI", Roboto, sans-serif;
+  color: var(--text);
+}
+
+.header {
+  text-align: center;
+  padding: 35px 10px;
+  background: var(--panel);
+  box-shadow: var(--shadow);
+}
+
+.subtitle {
+  margin-top: -10px;
+  color: #666;
+}
+
+.content-container {
+  max-width: 1200px;
+  margin: 30px auto;
+  padding: 10px;
+}
+
+.panel {
+  background: var(--panel);
+  padding: 25px;
+  border-radius: var(--radius);
+  margin-bottom: 30px;
+  box-shadow: var(--shadow);
+}
+
+h2 {
+  margin-top: 0;
+  font-size: 22px;
+}
+
+/* Inputs */
+.select {
+  width: 230px;
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: var(--radius);
+  border: 1px solid #ccc;
+  font-size: 15px;
+}
+
+/* Botón */
+.btn-primary {
+  padding: 10px 20px;
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-weight: bold;
+  transition: var(--transition);
+  margin-left: 10px;
+}
+
+.btn-primary:hover {
+  background: #004bcc;
+}
+
+/* Color Grid */
+.color-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(var(--card-size), 1fr));
+  gap: 18px;
+  margin-top: 20px;
+}
+
+.color-card {
+  height: var(--card-size);
+  border-radius: var(--radius);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 10px;
+  font-weight: bold;
+  color: white;
+  font-size: 18px;
+  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.4);
+  transition: transform var(--transition);
+}
+
+.color-card:hover {
+  transform: scale(1.05);
+}
+
+/* Chart */
+.bar-chart {
+  display: flex;
+  gap: 20px;
+  align-items: flex-end;
+  height: 250px;
+}
+
+.bar {
+  flex: 1;
+  border-radius: var(--radius);
+  transition: background-color var(--transition), transform var(--transition);
+}
+
+.bar:hover {
+  transform: translateY(-6px);
+}
+
+/* JSON */
+.json-box {
+  background: #111;
+  color: #0f0;
+  padding: 15px;
+  border-radius: var(--radius);
+  max-height: 400px;
+  overflow-y: auto;
+  font-size: 15px;
+  box-shadow: var(--shadow);
+}
+
+/* Bandera (simulación) */
+.flag {
+  width: 100%;
+  max-width: 700px;
+  height: 210px;
+  margin-top: 20px;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+}
+
+.flag .stripe {
+  flex: 1;
+  width: 100%;
+}
+
+/* Forzar colores exactos de la bandera bajo Tritanopía */
+.flag.flag--tritan .stripe:nth-child(1) {
+}
+.flag.flag--tritan .stripe:nth-child(2) {
+}
+.flag.flag--tritan .stripe:nth-child(3) {
+}
+.flag.flag--tritan .stripe:nth-child(4) {
+}
+.flag.flag--tritan .stripe:nth-child(5) {
+}
+.flag.flag--tritan .stripe:nth-child(6) {
+}
+.flag.flag--tritan .stripe:nth-child(1) {
+  background-color: #e81b1b !important;
+}
+.flag.flag--tritan .stripe:nth-child(2) {
+  background-color: #f06c6c !important;
+}
+.flag.flag--tritan .stripe:nth-child(3) {
+  background-color: #f7a7a7 !important;
+}
+.flag.flag--tritan .stripe:nth-child(4) {
+  background-color: #0e6b6b !important;
+}
+.flag.flag--tritan .stripe:nth-child(5) {
+  background-color: #00cfcf !important;
+}
+.flag.flag--tritan .stripe:nth-child(6) {
+  background-color: #7a4a42 !important;
+}

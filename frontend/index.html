@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Color Sense - Adaptación para Daltonismo</title>
+    <link rel="stylesheet" href="style.css" />
+
+    <!-- JSON-LD Metadata -->
+    <script type="application/ld+json">
+      {
+        "@context": "http://schema.org",
+        "@type": "WebApplication",
+        "name": "Color Sense",
+        "description": "Aplicación de adaptación visual automática para personas con daltonismo",
+        "applicationCategory": "AccessibilityApplication",
+        "offers": {
+          "@type": "Offer",
+          "priceCurrency": "EUR",
+          "price": "0"
+        },
+        "accessibility": ["ColorBlindMode", "HighContrast", "SimpleDesign"]
+      }
+    </script>
+  </head>
+
+  <body>
+    <header class="header">
+      <h1>🎨 Color Sense</h1>
+      <p class="subtitle">
+        Adaptación visual automática para personas con daltonismo
+      </p>
+    </header>
+
+    <main class="content-container">
+      <!-- CONFIGURACIÓN -->
+      <section class="panel">
+        <h2>Configuración del usuario</h2>
+
+        <label for="daltonType">Tipo de daltonismo:</label>
+        <select id="daltonType" class="select">
+          <option value="normal">Visión Normal</option>
+          <option value="protanopia">Protanopía (Ausencia de Rojo)</option>
+          <option value="deuteranopia">Deuteranopía (Ausencia de Verde)</option>
+          <option value="tritanopia">Tritanopía (Ausencia de Azul)</option>
+        </select>
+
+        <button id="adaptBtn" class="btn-primary">Aplicar Adaptación</button>
+      </section>
+
+      <!-- TARJETAS DE COLOR -->
+      <section class="panel">
+        <h2>Tarjetas de Colores</h2>
+        <p>
+          Estas tarjetas cambiarán según el tipo de daltonismo seleccionado.
+        </p>
+
+        <div class="color-grid">
+          <div
+            class="color-card"
+            data-color="#FF0000"
+            data-original-color="#FF0000"
+            data-tritan-color="#E81B1B"
+            data-label="Rojo"
+            style="background-color: #ff0000"
+          >
+            <span class="color-label">Rojo</span>
+          </div>
+
+          <div
+            class="color-card"
+            data-color="#00FF00"
+            data-original-color="#00FF00"
+            data-tritan-color="#00CFCF"
+            data-label="Verde"
+            style="background-color: #00ff00"
+          >
+            <span class="color-label">Verde</span>
+          </div>
+
+          <div
+            class="color-card"
+            data-color="#0000FF"
+            data-original-color="#0000FF"
+            data-tritan-color="#00CFCF"
+            data-label="Azul"
+            style="background-color: #0000ff"
+          >
+            <span class="color-label">Azul</span>
+          </div>
+
+          <div
+            class="color-card"
+            data-color="#FFA500"
+            data-original-color="#FFA500"
+            data-tritan-color="#F06C6C"
+            data-label="Naranja"
+            style="background-color: #ffa500"
+          >
+            <span class="color-label">Naranja</span>
+          </div>
+
+          <div
+            class="color-card"
+            data-color="#800080"
+            data-original-color="#800080"
+            data-tritan-color="#7A4A42"
+            data-label="Morado"
+            style="background-color: #800080"
+          >
+            <span class="color-label">Morado</span>
+          </div>
+
+          <div
+            class="color-card"
+            data-color="#FFC0CB"
+            data-original-color="#FFC0CB"
+            data-tritan-color="#F7A7A7"
+            data-label="Rosado"
+            style="background-color: #ffc0cb"
+          >
+            <span class="color-label">Rosado</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- BANDERA (Simulación) -->
+      <section class="panel">
+        <h2>Bandera (Simulación)</h2>
+        <p>Bandera normal y cómo se vería bajo Tritanopía.</p>
+
+        <div class="flag" id="flagSim">
+          <div
+            class="stripe"
+            data-original-color="#FF0000"
+            data-tritan-color="#E81B1B"
+            style="background: #ff0000"
+          ></div>
+          <div
+            class="stripe"
+            data-original-color="#FFA500"
+            data-tritan-color="#F06C6C"
+            style="background: #ffa500"
+          ></div>
+          <div
+            class="stripe"
+            data-original-color="#FFFF00"
+            data-tritan-color="#F7A7A7"
+            style="background: #ffff00"
+          ></div>
+          <div
+            class="stripe"
+            data-original-color="#00FF00"
+            data-tritan-color="#0E6B6B"
+            style="background: #00ff00"
+          ></div>
+          <div
+            class="stripe"
+            data-original-color="#0000FF"
+            data-tritan-color="#00CFCF"
+            style="background: #0000ff"
+          ></div>
+          <div
+            class="stripe"
+            data-original-color="#800080"
+            data-tritan-color="#7A4A42"
+            style="background: #800080"
+          ></div>
+        </div>
+      </section>
+
+      <!-- BARRAS -->
+      <section class="panel">
+        <h2>Gráfico de barras</h2>
+
+        <div id="bars" class="bar-chart">
+          <div
+            class="bar"
+            data-color="#FF0000"
+            data-label="Rojo"
+            style="height: 60%; background-color: #ff0000"
+          ></div>
+          <div
+            class="bar"
+            data-color="#00FF00"
+            data-label="Verde"
+            style="height: 30%; background-color: #00ff00"
+          ></div>
+          <div
+            class="bar"
+            data-color="#0000FF"
+            data-label="Azul"
+            style="height: 90%; background-color: #0000ff"
+          ></div>
+        </div>
+      </section>
+
+      <!-- SALIDA JSON -->
+      <section class="panel">
+        <h2>Salida del Servidor (JSON-LD)</h2>
+        <pre id="output" class="json-box">{ }</pre>
+      </section>
+
+      <!-- AGENT TESTER -->
+      <section class="panel">
+        <h2>Probador del Agente Semántico (Local)</h2>
+        <p>
+          Interactúa con el <code>LocalSemanticAgent</code> para validar la
+          comunicación con el servidor y ver respuestas.
+        </p>
+
+        <div
+          style="display: flex; gap: 12px; flex-wrap: wrap; align-items: center"
+        >
+          <label for="agentUserId">User ID:</label>
+          <input
+            id="agentUserId"
+            type="text"
+            value="demo"
+            style="padding: 8px; border-radius: 8px; border: 1px solid #ccc"
+          />
+
+          <button id="agentInitBtn" class="btn-primary">
+            Inicializar Agente
+          </button>
+          <button
+            id="agentAdaptBtn"
+            class="btn-primary"
+            style="background: #20c997"
+          >
+            Adaptar Elementos
+          </button>
+          <button
+            id="agentOntBtn"
+            class="btn-primary"
+            style="background: #6610f2"
+          >
+            Obtener Ontología
+          </button>
+          <button
+            id="agentTransBtn"
+            class="btn-primary"
+            style="background: #fd7e14"
+          >
+            Transformaciones
+          </button>
+          <button
+            id="agentFeedbackBtn"
+            class="btn-primary"
+            style="background: #6c757d"
+          >
+            Enviar Feedback
+          </button>
+        </div>
+
+        <p style="margin-top: 10px">Salida del Agente:</p>
+        <pre id="agentOutput" class="json-box">{ }</pre>
+      </section>
+    </main>
+
+    <script src="semantic-agent.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>

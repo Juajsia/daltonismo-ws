@@ -1,0 +1,12 @@
+{
+  "users": [
+    {
+      "userId": "demo",
+      "daltonismType": "deuteranopia",
+      "preferences": {
+        "contrastLevel": "high",
+        "fontSize": "medium"
+      }
+    }
+  ]
+}

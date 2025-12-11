@@ -1,0 +1,39 @@
+version: "3.8"
+
+services:
+  mongodb:
+    image: mongo:7.0
+    container_name: color-sense-mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin123
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - color-sense-network
+
+  backend:
+    build: ./backend
+    container_name: color-sense-backend
+    environment:
+      NODE_ENV: production
+      MONGO_URI: mongodb://admin:admin123@mongodb:27017/color-sense?authSource=admin
+      PORT: 3000
+      CORS_ORIGIN: "http://localhost:8000,http://localhost:3000"
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mongodb
+    volumes:
+      - ./backend/src:/app/src
+    networks:
+      - color-sense-network
+
+volumes:
+  mongo_data:
+
+networks:
+  color-sense-network:
+    driver: bridge
