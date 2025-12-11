@@ -223,5 +223,3 @@ MIT
 
 ---
 
-**Creado para:** Universidad Internacional de Valencia - Web Semántica
-**Fecha:** Noviembre 2025
